@@ -288,8 +288,16 @@ select {
   padding: 18px 20px;
 }
 
-.parameter-filter-row {
+.quick-filter-grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px 28px;
   margin-bottom: 14px;
+}
+
+.parameter-filter-row {
+  min-width: 0;
 }
 
 .parameter-filter-label {
@@ -300,6 +308,11 @@ select {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+
+.parameter-filter-row-right {
+  margin-left: auto;
+  text-align: left;
 }
 
 .parameter-filter-group {
@@ -536,6 +549,14 @@ select {
   .summary-grid,
   .filter-strip {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .quick-filter-grid {
+    flex-direction: column;
+  }
+
+  .parameter-filter-row-right {
+    margin-left: 0;
   }
 }
 

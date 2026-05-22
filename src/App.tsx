@@ -227,57 +227,59 @@ function App() {
           </section>
 
           <section className="control-panel">
-            <div className="parameter-filter-row">
-              <span className="parameter-filter-label">Route</span>
-              <div className="parameter-filter-group">
-                {ROUTE_FILTER_OPTIONS.map((route) => (
-                  <button
-                    key={route.routeEntityType || 'all-routes'}
-                    type="button"
-                    className={`parameter-chip${filters.routeEntityType === route.routeEntityType ? ' active' : ''}`}
-                    onClick={() =>
-                      setFilters((current) => ({
-                        ...current,
-                        routeEntityType: route.routeEntityType,
-                      }))
-                    }
-                  >
-                    {route.label}
-                  </button>
-                ))}
+            <div className="quick-filter-grid">
+              <div className="parameter-filter-row">
+                <span className="parameter-filter-label">Route</span>
+                <div className="parameter-filter-group">
+                  {ROUTE_FILTER_OPTIONS.map((route) => (
+                    <button
+                      key={route.routeEntityType || 'all-routes'}
+                      type="button"
+                      className={`parameter-chip${filters.routeEntityType === route.routeEntityType ? ' active' : ''}`}
+                      onClick={() =>
+                        setFilters((current) => ({
+                          ...current,
+                          routeEntityType: route.routeEntityType,
+                        }))
+                      }
+                    >
+                      {route.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div className="parameter-filter-row">
-              <span className="parameter-filter-label">Match parameter</span>
-              <div className="parameter-filter-group">
-                <button
-                  type="button"
-                  className={`parameter-chip${filters.matchedField === '' ? ' active' : ''}`}
-                  onClick={() =>
-                    setFilters((current) => ({
-                      ...current,
-                      matchedField: '',
-                    }))
-                  }
-                >
-                  All
-                </button>
-                {MATCH_FIELD_OPTIONS.map((field) => (
+              <div className="parameter-filter-row parameter-filter-row-right">
+                <span className="parameter-filter-label">Match parameter</span>
+                <div className="parameter-filter-group">
                   <button
-                    key={field}
                     type="button"
-                    className={`parameter-chip${filters.matchedField === field ? ' active' : ''}`}
+                    className={`parameter-chip${filters.matchedField === '' ? ' active' : ''}`}
                     onClick={() =>
                       setFilters((current) => ({
                         ...current,
-                        matchedField: field,
+                        matchedField: '',
                       }))
                     }
                   >
-                    {getFieldLabel(field)}
+                    All
                   </button>
-                ))}
+                  {MATCH_FIELD_OPTIONS.map((field) => (
+                    <button
+                      key={field}
+                      type="button"
+                      className={`parameter-chip${filters.matchedField === field ? ' active' : ''}`}
+                      onClick={() =>
+                        setFilters((current) => ({
+                          ...current,
+                          matchedField: field,
+                        }))
+                      }
+                    >
+                      {getFieldLabel(field)}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="filter-strip">
