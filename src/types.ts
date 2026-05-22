@@ -53,6 +53,7 @@ export interface DashboardSummary {
 
 export interface MatchFilters {
   entityType: MatchEntityType;
+  routeEntityType: '' | 'BUYER' | 'EXPORTER';
   minScore: number;
   search: string;
   matchedField: '' | MatchField;

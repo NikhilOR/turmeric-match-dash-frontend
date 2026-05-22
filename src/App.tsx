@@ -11,33 +11,30 @@ const SECTION_OPTIONS: Array<{
   shortLabel: string;
 }> = [
   {
-    entityType: 'EXPORTER',
-    label: 'Exporter',
-    description: 'Export trade opportunities',
-    shortLabel: 'EX',
-  },
-  {
     entityType: 'SUPPLIER',
     label: 'Supplier',
     description: 'Supply-side matching queue',
     shortLabel: 'SU',
   },
-  {
-    entityType: 'BUYER',
-    label: 'Buyer',
-    description: 'Domestic buyer opportunities',
-    shortLabel: 'BY',
-  },
 ];
 
 const EMPTY_FILTERS: MatchFilters = {
   entityType: DEFAULT_SECTION,
+  routeEntityType: '',
   minScore: 60,
   search: '',
   matchedField: '',
 };
 
 const MATCH_FIELD_OPTIONS: MatchField[] = ['price', 'quality', 'quantity', 'location', 'others'];
+const ROUTE_FILTER_OPTIONS: Array<{
+  routeEntityType: MatchFilters['routeEntityType'];
+  label: string;
+}> = [
+  { routeEntityType: '', label: 'All routes' },
+  { routeEntityType: 'BUYER', label: 'Supplier -> Buyer' },
+  { routeEntityType: 'EXPORTER', label: 'Supplier -> Exporter' },
+];
 
 function getEntityLabel(entityType: MatchEntityType) {
   switch (entityType) {
@@ -48,6 +45,11 @@ function getEntityLabel(entityType: MatchEntityType) {
     case 'EXPORTER':
       return 'Exporter';
   }
+}
+
+function getRouteFilterLabel(routeEntityType: MatchFilters['routeEntityType']) {
+  const option = ROUTE_FILTER_OPTIONS.find((route) => route.routeEntityType === routeEntityType);
+  return option?.label ?? 'All routes';
 }
 
 function App() {
@@ -191,7 +193,9 @@ function App() {
               value={activeSummary?.total ?? 0}
               tone="gold"
               hint={
-                filters.matchedField
+                filters.routeEntityType
+                  ? `${getRouteFilterLabel(filters.routeEntityType)} pending matches`
+                  : filters.matchedField
                   ? `${getFieldLabel(filters.matchedField)}-matched ${activeSectionMeta.label.toLowerCase()} rows`
                   : `Total pending ${activeSectionMeta.label.toLowerCase()} matches`
               }
@@ -201,7 +205,9 @@ function App() {
               value={`${activeSummary?.avgScore?.toFixed(1) ?? '0.0'}%`}
               tone="mint"
               hint={
-                filters.matchedField
+                filters.routeEntityType
+                  ? `Average confidence for ${getRouteFilterLabel(filters.routeEntityType).toLowerCase()}`
+                  : filters.matchedField
                   ? `Average score for ${getFieldLabel(filters.matchedField).toLowerCase()}-matched rows`
                   : `Average confidence for ${activeSectionMeta.label.toLowerCase()} matches`
               }
@@ -221,6 +227,27 @@ function App() {
           </section>
 
           <section className="control-panel">
+            <div className="parameter-filter-row">
+              <span className="parameter-filter-label">Route</span>
+              <div className="parameter-filter-group">
+                {ROUTE_FILTER_OPTIONS.map((route) => (
+                  <button
+                    key={route.routeEntityType || 'all-routes'}
+                    type="button"
+                    className={`parameter-chip${filters.routeEntityType === route.routeEntityType ? ' active' : ''}`}
+                    onClick={() =>
+                      setFilters((current) => ({
+                        ...current,
+                        routeEntityType: route.routeEntityType,
+                      }))
+                    }
+                  >
+                    {route.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="parameter-filter-row">
               <span className="parameter-filter-label">Match parameter</span>
               <div className="parameter-filter-group">

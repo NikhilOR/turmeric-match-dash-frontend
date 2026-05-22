@@ -33,10 +33,13 @@ async function parseJson<T>(response: Response): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export async function fetchSummary(filters: Pick<MatchFilters, 'entityType' | 'minScore' | 'matchedField'>) {
+export async function fetchSummary(
+  filters: Pick<MatchFilters, 'entityType' | 'routeEntityType' | 'minScore' | 'matchedField'>,
+) {
   const response = await fetch(
     buildUrl('/api/dashboard/summary', {
       source_entity_type: filters.entityType,
+      match_type: filters.routeEntityType || undefined,
       min_score: filters.minScore || undefined,
       matched_field: filters.matchedField || undefined,
     }),
@@ -48,6 +51,7 @@ export async function fetchMatches(filters: MatchFilters, page = 1, limit = 20) 
   const response = await fetch(
     buildUrl('/api/matches', {
       source_entity_type: filters.entityType,
+      match_type: filters.routeEntityType || undefined,
       min_score: filters.minScore || undefined,
       matched_field: filters.matchedField || undefined,
       page,
